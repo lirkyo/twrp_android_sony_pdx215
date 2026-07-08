@@ -25,6 +25,9 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+# OrangeFox Recovery Init for Sony Xperia 1 III / 5 III (pdx215/pdx214)
+# Copyright (C) 2024 OrangeFox & The Linux Foundation
+
 on fs
     export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
@@ -34,15 +37,27 @@ on fs
     chmod 0664 /dev/ion
     chown system system /dev/ion
     install_keyring
+    # OrangeFox: Mount necessary system paths
+    mkdir /sdcard 0770 media_rw media_rw
+    mkdir /sdcard1 0770 media_rw media_rw
+    symlink /sdcard /external_sd
 
 on init
     write /sys/devices/virtual/sec/tsp/after_work 1
     start vendor.qseecomd
     start boot-hal-1-1
+    # OrangeFox: set up LED notification path
+    chmod 0664 /sys/class/leds/green/brightness
+    chmod 0664 /sys/class/leds/red/brightness
 
 on boot
     setprop sys.usb.config adb
     start health-hal-2-1
+    # OrangeFox: ensure proper permissions
+    chmod 0644 /proc/cmdline
+    chmod 0644 /proc/version
+    write /proc/sys/kernel/panic_on_oops 1
+    write /proc/sys/vm/swappiness 100
 
 on property:vendor.sys.listeners.registered=true
     start keymaster-4-1
@@ -65,3 +80,11 @@ service gatekeeper-1-0 /vendor/bin/hw/android.hardware.gatekeeper@1.0-service-qt
     group root
     disabled
     seclabel u:r:recovery:s0
+
+# OrangeFox: adbd service for debugging
+service adbd /system/bin/adbd --root_seclabel=u:r:recovery:s0
+    user root
+    group root system shell
+    socket adbd seqpacket 660 system system
+    seclabel u:r:recovery:s0
+    disabled

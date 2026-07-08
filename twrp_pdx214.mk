@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019 The TwrpBuilder Open-Source Project
+# Copyright (C) 2019-2024 The OrangeFox & TwrpBuilder Open-Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,9 +25,18 @@ $(call inherit-product, $(DEVICE_PATH)/device.mk)
 PRODUCT_DEVICE := pdx215
 PRODUCT_NAME := twrp_pdx214
 PRODUCT_BRAND := Sony
-PRODUCT_MODEL := Sony Xperia 5 III
+PRODUCT_MODEL := Xperia 5 III
 PRODUCT_MANUFACTURER := Sony
+
+# OrangeFox build fingerprint override
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+    ro.product.system.brand=Sony \
+    ro.product.system.manufacturer=Sony \
+    ro.product.system.model=Xperia 5 III
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := $(PRODUCT_RELEASE_NAME)
+
+# OrangeFox additional device asserts
+TARGET_OTA_ASSERT_DEVICE += pdx214
 

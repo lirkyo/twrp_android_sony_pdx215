@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019 The TwrpBuilder Open-Source Project
+# Copyright (C) 2019-2024 The OrangeFox & TwrpBuilder Open-Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 
+# OrangeFox Recovery product makefiles for Sony Xperia 1 III / 5 III
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/twrp_pdx214.mk \
-    $(LOCAL_DIR)/twrp_pdx215.mk
+    $(LOCAL_DIR)/twrp_pdx215.mk \
+    $(LOCAL_DIR)/twrp_pdx214.mk

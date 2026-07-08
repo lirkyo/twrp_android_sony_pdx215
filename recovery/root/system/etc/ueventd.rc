@@ -84,3 +84,10 @@ subsystem dma_heap
 
 # Add TA block device permission
 /dev/block/platform/soc/1d84000.ufshc/by-name/TA        0660   oem_2997   oem_2997
+
+# OrangeFox: SD card / external storage permissions
+/dev/block/mmcblk1*                                     0660   media_rw   media_rw
+/dev/block/sd*                                          0660   media_rw   media_rw
+
+# OrangeFox: super partition access
+/dev/block/by-name/super                                0660   root       root

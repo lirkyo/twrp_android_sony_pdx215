@@ -1,3 +1,5 @@
+# OrangeFox Recovery Properties for Sony Xperia 1 III / 5 III (pdx215/pdx214)
+
 # ADB
 ro.adb.secure=0
 ro.boot.dynamic_partitions=true
@@ -9,4 +11,42 @@ vendor.gatekeeper.disable_spu=true
 ro.charger.enable_suspend=1
 
 # Reset allocatable space
-ro.dynamic.full_size=12348030976
+ro.dynamic.full_size=14495514624
+
+# OrangeFox specific properties
+ro.orangefox.version=R11.1_2
+ro.orangefox.build.type=UNOFFICIAL
+ro.orangefox.codename=Sagami
+
+# Disable ADB authentication in recovery
+ro.debuggable=1
+ro.secure=0
+
+# FBE / Encryption properties
+ro.crypto.volume.filenames_mode=aes-256-cts
+ro.crypto.set_dun_overflow=true
+ro.crypto.allow_encrypt_override=true
+ro.crypto.dm_default_key.default.location=/metadata/key
+
+# USB config
+persist.sys.usb.config=mtp,adb
+sys.usb.config=mtp,adb
+sys.usb.configfs=1
+
+# Dynamic partitions
+ro.boot.dynamic_partitions=true
+
+# Performance
+persist.sys.sf.native_mode=1
+debug.sf.nobootanimation=1
+
+# Media
+media.stagefright.legacyencoder=true
+media.stagefright.less-secure=true
+
+# VNDK
+ro.vndk.version=31
+ro.vndk.lite=true
+
+# Disable rescue party
+persist.sys.disable_rescue=true

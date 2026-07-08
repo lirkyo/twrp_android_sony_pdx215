@@ -16,18 +16,18 @@
 
 # Architecture
 TARGET_ARCH := arm64
-TARGET_ARCH_VARIANT := armv8-a
+TARGET_ARCH_VARIANT := armv8-2a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := kryo
-TARGET_CPU_VARIANT_RUNTIME := kryo680
+TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT_RUNTIME := kryo385
 
 TARGET_2ND_ARCH := arm
-TARGET_2ND_ARCH_VARIANT := $(TARGET_ARCH_VARIANT)
+TARGET_2ND_ARCH_VARIANT := armv8-a
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
-TARGET_2ND_CPU_VARIANT := $(TARGET_CPU_VARIANT)
-TARGET_2ND_CPU_VARIANT_RUNTIME := $(TARGET_CPU_VARIANT_RUNTIME)
+TARGET_2ND_CPU_VARIANT := generic
+TARGET_2ND_CPU_VARIANT_RUNTIME := kryo385
 
 ENABLE_CPUSETS := true
 ENABLE_SCHEDBOOST := true
@@ -45,7 +45,7 @@ QCOM_BOARD_PLATFORMS += sony_sm8350
 
 # Kernel
 BOARD_BOOT_HEADER_VERSION := 3
-BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom androidboot.memcg=1 lpm_levels.sleep_disabled=1 video=vfb:640x400,bpp=32,memsize=3072000 msm_rtb.filter=0x237 service_locator.enable=1 androidboot.usbcontroller=a600000.dwc3 swiotlb=2048 loop.max_part=7 cgroup.memory=nokmem,nosocket reboot=panic_warm buildproduct=pdx215 buildid=SAGAMI-1.0.2-211112-0030 zram.backend=z3fold
+BOARD_KERNEL_CMDLINE := androidboot.console=ttyMSM0 androidboot.hardware=qcom androidboot.memcg=1 androidboot.usbcontroller=a600000.dwc3 cgroup.memory=nokmem,nosocket console=ttyMSM0,115200n8 loop.max_part=7 lpm_levels.sleep_disabled=1 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=0 pcie_ports=compat iptable_raw.raw_before_defrag=1 ip6table_raw.raw_before_defrag=1 video=vfb:640x400,bpp=32,memsize=3072000 reboot=panic_warm buildproduct=pdx215 buildid=SAGAMI-1.0.2-211112-0030 zram.backend=z3fold
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_PAGESIZE := 4096
 BOARD_RAMDISK_OFFSET := 0x01000000
@@ -98,10 +98,11 @@ BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := 0x06000000
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
 
 # Dynamic Partition
-BOARD_SUPER_PARTITION_SIZE := 12348030976
-BOARD_SUPER_PARTITION_GROUPS := somc_dynamic_partitions
-BOARD_SOMC_DYNAMIC_PARTITIONS_SIZE := 6169821184
-BOARD_SOMC_DYNAMIC_PARTITIONS_PARTITION_LIST := product vendor system odm system_ext vendor_dlkm
+BOARD_SUPER_PARTITION_SIZE := 0x360000000
+BOARD_SUPER_PARTITION_GROUPS := dynamic_partitions
+
+BOARD_DYNAMIC_PARTITIONS_SIZE := 0x180000000
+BOARD_DYNAMIC_PARTITIONS_PARTITION_LIST := odm product system system_ext vendor vendor_dlkm
 
 # System as root
 BOARD_ROOT_EXTRA_FOLDERS := bluetooth dsp firmware persist
@@ -131,7 +132,7 @@ TARGET_RECOVERY_PIXEL_FORMAT := "BGRA_8888"
 # Crypto
 BOARD_USES_QCOM_FBE_DECRYPTION := true
 BOARD_USES_METADATA_PARTITION := true
-PLATFORM_VERSION := 13
+PLATFORM_VERSION := 99.87.36
 PLATFORM_VERSION_LAST_STABLE := $(PLATFORM_VERSION)
 PLATFORM_SECURITY_PATCH := 2099-12-31
 VENDOR_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
@@ -147,13 +148,11 @@ BUILD_BROKEN_USES_NETWORK := true
 # Tool
 TW_INCLUDE_REPACKTOOLS := true
 TW_INCLUDE_RESETPROP := true
-TW_INCLUDE_LIBRESETPROP :=true
-			     
-# TWRP specific build flags
+TW_INCLUDE_LIBRESETPROP := true
+
+# Recovery specific build flags
 TW_THEME := portrait_hdpi
-ifeq ($(TW_DEVICE_VERSION),)
-TW_DEVICE_VERSION=12.0
-endif
+TW_DEVICE_VERSION := 12.0
 RECOVERY_SDCARD_ON_DATA := true
 TARGET_RECOVERY_QCOM_RTC_FIX := true
 TW_EXCLUDE_DEFAULT_USB_INIT := true
@@ -171,13 +170,48 @@ TW_EXCLUDE_APEX := true
 TW_LOAD_VENDOR_MODULES := "adsp_loader_dlkm.ko q6_dlkm.ko q6_notifier_dlkm.ko q6_pdr_dlkm.ko somc_battchg_ext.ko"
 TW_CUSTOM_CPU_TEMP_PATH := "/sys/class/thermal/thermal_zone20/temp"
 TW_BATTERY_SYSFS_WAIT_SECONDS := 5
-
 TW_NO_HAPTICS := true
-TW_EXCLUDE_APEX := true
 
 ALLOW_MISSING_DEPENDENCIES := true
 
-#BOARD_AVB_RECOVERY_ADD_HASH_FOOTER_ARGS += \
-#--prop com.android.build.boot.os_version:$(PLATFORM_VERSION) \
-#--prop com.android.build.boot.security_patch:$(PLATFORM_SECURITY_PATCH)
+# OrangeFox specific flags
+OF_SCREEN_H := 2520
+OF_SCREEN_W := 1080
+OF_STATUS_H := 96
+OF_STATUS_INDENT_LEFT := 48
+OF_STATUS_INDENT_RIGHT := 48
+OF_CLOCK_POS := 1
+OF_USE_GREEN_LED := 0
+
+FOX_AB_DEVICE := 1
+FOX_VIRTUAL_AB_DEVICE := 1
+OF_QUICK_BACKUP_LIST := /boot;/data;
+OF_FL_PATH1 := /sdcard
+OF_FL_PATH2 := /sdcard1
+OF_USE_MAGISKBOOT := 1
+OF_USE_MAGISKBOOT_FOR_ALL_PATCHES := 1
+OF_PATCH_AVB20 := 1
+OF_NO_TREBLE_COMPATIBILITY_CHECK := 1
+OF_DONT_PATCH_ENCRYPTED_DEVICE := 1
+OF_KEEP_FORCED_ENCRYPTION := 1
+# OF_SUPPORT_ALL_BLOCK_OTA_UPDATES removed: not compatible with VANILLA builds
+OF_FIX_OTA_UPDATE_MANUAL_FLASH_ERROR := 1
+OF_USE_NEW_MAGISKBOOT := 1
+
+FOX_USE_TWRP_RECOVERY_IMAGE_BUILDER := 1
+FOX_USE_BASH_SHELL := 1
+FOX_ASH_IS_BASH := 1
+FOX_USE_NANO_EDITOR := 1
+FOX_USE_TAR_BINARY := 1
+FOX_USE_ZIP_BINARY := 1
+FOX_USE_SED_BINARY := 1
+FOX_USE_XZ_UTILS := 1
+FOX_REPLACE_BUSYBOX_PS := 1
+FOX_R11 := 1
+FOX_ENABLE_APP_MANAGER := 1
+OF_ADVANCED_SECURITY := 1
+FOX_DELETE_AROMAFM := 1
+
+# Dynamic partition resize support
+OF_DYNAMIC_FULL_SIZE := 14495514624
 

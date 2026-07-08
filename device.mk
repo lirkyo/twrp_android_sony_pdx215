@@ -29,8 +29,9 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
 # Configure SDCard replacement functionality
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
-# Configure twrp
-$(call inherit-product, vendor/twrp/config/common.mk)
+# Configure OrangeFox Recovery
+$(call inherit-product-if-exists, vendor/orangefox/build/twrp/config/common.mk)
+$(call inherit-product-if-exists, vendor/twrp/config/common.mk)
 
 # SHIPPING API
 PRODUCT_SHIPPING_API_LEVEL := 30
@@ -97,4 +98,31 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
 # PRODUCT_RELEASE_NAME ro.twrp.device.name
 PRODUCT_PROPERTY_OVERRIDES += ro.twrp.device.name=$(PRODUCT_RELEASE_NAME)
+PRODUCT_PROPERTY_OVERRIDES += ro.orangefox.device=$(PRODUCT_RELEASE_NAME)
+PRODUCT_PROPERTY_OVERRIDES += ro.orangefox.version=R11.1
+PRODUCT_PROPERTY_OVERRIDES += ro.build.fingerprint=Sony/sagami/sagami:13/TP1A.221005.002/1:userdebug/release-keys
 TWRP_REQUIRED_MODULES += sony_firmware
+
+# OrangeFox additional packages
+PRODUCT_PACKAGES += \
+    fox_addon \
+    fox_theme \
+    magiskboot \
+    bash \
+    nano \
+    tar \
+    zip \
+    sed \
+    xz \
+    lzma \
+    unzip \
+    gzip \
+    brotli
+
+PRODUCT_HOST_PACKAGES += \
+    lz4
+
+# Ensure OrangeFox init scripts are included
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/recovery/root/init.recovery.qcom.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.qcom.rc \
+    $(DEVICE_PATH)/recovery/root/init.recovery.usb.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.usb.rc
